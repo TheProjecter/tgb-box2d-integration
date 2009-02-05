@@ -34,6 +34,7 @@ THE SOFTWARE.
 #include "./Joints/Box2dMouseJointRef.h"
 #include "./Joints/Box2dDistanceJointRef.h"
 #include "./Joints/Box2dPrismaticJointRef.h"
+#include "./Joints/Box2dGearJointRef.h"
 #include "core/tVector.h"
 #include "core/frameAllocator.h"
 
@@ -459,6 +460,7 @@ Box2dJointRef* Box2dWorldRef::createJoint( SimObject* def )
     case e_mouseJoint: return this->createMouseJoint( def );
     case e_distanceJoint: return this->createDistanceJoint( def );
     case e_prismaticJoint: return this->createPrismaticJoint( def );
+    case e_gearJoint: return this->createGearJoint( def );
     
     default: Con::errorf( 
                  "Box2dWorldRef::createJoint() - Unknown JointType %s.", 
@@ -1555,6 +1557,83 @@ Box2dJointRef* Box2dWorldRef::createPrismaticJoint( SimObject *def )
     if ( notEmpty( value ) )
     {
         jointDef.motorSpeed = strToFloat( value );
+    }
+
+    b2Joint * joint = this->mWorld->CreateJoint( &jointDef );
+    jointRef->setJoint( joint );
+
+    return jointRef;
+}
+
+
+//=----------------------------------------------------------------------------
+// Box2dWorldRef::createGearJoint()
+//=----------------------------------------------------------------------------
+Box2dJointRef* Box2dWorldRef::createGearJoint( SimObject *def )
+{
+    AssertFatal( this->mWorld != NULL, "" );
+    AssertFatal( def != NULL, "" );
+    AssertFatal( dStricmp( def->getDataField( 
+        StringTable->insert( "jointType" ), NULL ), "e_gearJoint" ) == 0, 
+        "" 
+        );
+
+    Box2dGearJointRef *jointRef = new Box2dGearJointRef();
+
+    if ( !jointRef->registerObject() )
+    {
+        AssertFatal( 
+            false, 
+            "Box2dWorldRef::createGearJoint() - \
+            Couldn't register jointRef." 
+            );
+
+        return NULL;
+    }
+    
+    b2GearJointDef jointDef;
+
+    this->readJointBaseData( def, &jointDef, jointRef );
+
+    static const StringTableEntry stJoint1 = StringTable->insert( "joint1" );
+    static const StringTableEntry stJoint2 = StringTable->insert( "joint2" );
+    static const StringTableEntry stRatio = StringTable->insert( "ratio" );
+        
+    // joint1
+    const char * value = def->getDataField( stJoint1, NULL );
+    if ( notEmpty( value ) )
+    {
+        Box2dJointRef *jointRef1 = 
+            dynamic_cast<Box2dJointRef*>( Sim::findObject( value ) );
+        
+        AssertFatal( dynamic_cast<Box2dRevoluteJointRef*>( jointRef1 ) ||
+            dynamic_cast<Box2dRevoluteJointRef*>( jointRef1 ),
+            "Box2dWorldRef::createGearJoint() - Joint 1 is neither a revolute \
+             joint nor a prismatic joint." );
+
+        jointDef.joint1 = jointRef1->getJoint();
+    }
+
+    // joint2
+    const char * value = def->getDataField( stJoint2, NULL );
+    if ( notEmpty( value ) )
+    {
+        Box2dJointRef *jointRef2 = 
+            dynamic_cast<Box2dJointRef*>( Sim::findObject( value ) );
+        
+        AssertFatal( dynamic_cast<Box2dRevoluteJointRef*>( jointRef2 ) ||
+            dynamic_cast<Box2dRevoluteJointRef*>( jointRef2 ),
+            "Box2dWorldRef::createGearJoint() - Joint 2 is neither a revolute \
+             joint nor a prismatic joint." );
+
+        jointDef.joint2 = jointRef2->getJoint();
+    }
+
+    // ratio
+    value = def->getDataField( stRatio, NULL );
+    if ( notEmpty( value ) )
+    {
+        jointDef.ratio = strToFloat( value );
     }
 
     b2Joint * joint = this->mWorld->CreateJoint( &jointDef );
