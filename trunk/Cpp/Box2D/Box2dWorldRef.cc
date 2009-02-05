@@ -35,6 +35,7 @@ THE SOFTWARE.
 #include "./Joints/Box2dDistanceJointRef.h"
 #include "./Joints/Box2dPrismaticJointRef.h"
 #include "./Joints/Box2dGearJointRef.h"
+#include "./Joints/Box2dPulleyJointRef.h"
 #include "core/tVector.h"
 #include "core/frameAllocator.h"
 
@@ -461,6 +462,7 @@ Box2dJointRef* Box2dWorldRef::createJoint( SimObject* def )
     case e_distanceJoint: return this->createDistanceJoint( def );
     case e_prismaticJoint: return this->createPrismaticJoint( def );
     case e_gearJoint: return this->createGearJoint( def );
+    case e_pulleyJoint: return this->createPulleyJoint( def );
     
     default: Con::errorf( 
                  "Box2dWorldRef::createJoint() - Unknown JointType %s.", 
@@ -1615,7 +1617,7 @@ Box2dJointRef* Box2dWorldRef::createGearJoint( SimObject *def )
     }
 
     // joint2
-    const char * value = def->getDataField( stJoint2, NULL );
+    value = def->getDataField( stJoint2, NULL );
     if ( notEmpty( value ) )
     {
         Box2dJointRef *jointRef2 = 
@@ -1627,6 +1629,124 @@ Box2dJointRef* Box2dWorldRef::createGearJoint( SimObject *def )
              joint nor a prismatic joint." );
 
         jointDef.joint2 = jointRef2->getJoint();
+    }
+
+    // ratio
+    value = def->getDataField( stRatio, NULL );
+    if ( notEmpty( value ) )
+    {
+        jointDef.ratio = strToFloat( value );
+    }
+
+    b2Joint * joint = this->mWorld->CreateJoint( &jointDef );
+    jointRef->setJoint( joint );
+
+    return jointRef;
+}
+
+
+//=----------------------------------------------------------------------------
+// Box2dWorldRef::createPulleyJoint()
+//=----------------------------------------------------------------------------
+Box2dJointRef* Box2dWorldRef::createPulleyJoint( SimObject *def )
+{
+    AssertFatal( this->mWorld != NULL, "" );
+    AssertFatal( def != NULL, "" );
+    AssertFatal( dStricmp( def->getDataField( 
+        StringTable->insert( "jointType" ), NULL ), "e_pulleyJoint" ) == 0, 
+        "" 
+        );
+
+    Box2dPulleyJointRef *jointRef = new Box2dPulleyJointRef();
+
+    if ( !jointRef->registerObject() )
+    {
+        AssertFatal( 
+            false, 
+            "Box2dWorldRef::createGearJoint() - \
+            Couldn't register jointRef." 
+            );
+
+        return NULL;
+    }
+    
+    b2PulleyJointDef jointDef;
+
+    this->readJointBaseData( def, &jointDef, jointRef );
+
+    static const StringTableEntry stGroundAnchor1 = 
+        StringTable->insert( "groundAnchor1" );
+    static const StringTableEntry stGroundAnchor2 = 
+        StringTable->insert( "groundAnchor2" );
+    static const StringTableEntry stLocalAnchor1 = 
+        StringTable->insert( "localAnchor1" );
+    static const StringTableEntry stLocalAnchor2 = 
+        StringTable->insert( "localAnchor2" );
+    static const StringTableEntry stLength1 = 
+        StringTable->insert( "length1" );
+    static const StringTableEntry stLength2 = 
+        StringTable->insert( "length2" );
+    static const StringTableEntry stMaxLength1 = 
+        StringTable->insert( "maxLength1" );
+    static const StringTableEntry stMaxLength2 = 
+        StringTable->insert( "maxLength2" );
+    static const StringTableEntry stRatio = 
+        StringTable->insert( "ratio" );
+    
+    // groundAnchor1
+    const char * value = def->getDataField( stGroundAnchor1, NULL );
+    if ( notEmpty( value ) )
+    {
+        jointDef.groundAnchor1 = Box2dUtil::strTob2Vec2( value );
+    }
+
+    // groundAnchor2
+    value = def->getDataField( stGroundAnchor2, NULL );
+    if ( notEmpty( value ) )
+    {
+        jointDef.groundAnchor2 = Box2dUtil::strTob2Vec2( value );
+    }
+
+    // localAnchor1
+    value = def->getDataField( stLocalAnchor1, NULL );
+    if ( notEmpty( value ) )
+    {
+        jointDef.localAnchor1 = Box2dUtil::strTob2Vec2( value );
+    }
+
+    // localAnchor2
+    value = def->getDataField( stLocalAnchor2, NULL );
+    if ( notEmpty( value ) )
+    {
+        jointDef.localAnchor2 = Box2dUtil::strTob2Vec2( value );
+    }
+
+    // length1
+    value = def->getDataField( stLength1, NULL );
+    if ( notEmpty( value ) )
+    {
+        jointDef.length1 = Box2dUtil::strToFloat( value );
+    }
+
+    // length2
+    value = def->getDataField( stLength2, NULL );
+    if ( notEmpty( value ) )
+    {
+        jointDef.length2 = Box2dUtil::strToFloat( value );
+    }
+
+    // maxLength1
+    value = def->getDataField( stMaxLength1, NULL );
+    if ( notEmpty( value ) )
+    {
+        jointDef.maxLength1 = Box2dUtil::strToFloat( value );
+    }
+
+    // maxLength2
+    value = def->getDataField( stMaxLength2, NULL );
+    if ( notEmpty( value ) )
+    {
+        jointDef.maxLength2 = Box2dUtil::strToFloat( value );
     }
 
     // ratio

@@ -161,6 +161,7 @@ private:
     Box2dJointRef* createDistanceJoint( SimObject *def );
     Box2dJointRef* createPrismaticJoint( SimObject *def );
     Box2dJointRef* createGearJoint( SimObject *def );
+    Box2dJointRef* createPulleyJoint( SimObject *def );
 
     b2World                        *mWorld;
     InternalDestructionListener     mInternalDestructionListener;
