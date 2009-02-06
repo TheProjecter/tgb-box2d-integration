@@ -106,7 +106,10 @@ function Box2dScene::_setupPreExistingObjects( %this )
 //=----------------------------------------------------------------------------
 function Box2dScene::onLevelEnded( %this )
 {
-    %this.worldRef.delete();
+    if ( isObject( %this.worldRef ) )
+    {
+        %this.worldRef.delete();
+    }
     
     if ( isFunction(printBox2dDebugInfo) )
     {
