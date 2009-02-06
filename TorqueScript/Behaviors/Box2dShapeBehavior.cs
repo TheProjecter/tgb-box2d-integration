@@ -67,7 +67,7 @@ if ( !isObject(Box2dShapeBehavior) )
 	Box2dShapeBehavior.addBehaviorField( "Restitution", "The shape's coefficient of restitution", float, 0.0 );
 	Box2dShapeBehavior.addBehaviorField( "Density", "The shape's density", float, 0.0 );
 	Box2dShapeBehavior.addBehaviorField( "IsSensor", "The shape's coefficient of friction", bool, false );
-	Box2dShapeBehavior.addBehaviorField( "FilterCategoryBits", "See Box2D documentation", "BitMask16" , "" );
+	Box2dShapeBehavior.addBehaviorField( "FilterCategoryBits", "See Box2D documentation", "BitMask16" , "1" );
 	Box2dShapeBehavior.addBehaviorField( "FilterMaskBits", "See Box2D documentation", "BitMask16" , "0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15" );
 	Box2dShapeBehavior.addBehaviorField( "FilterGroupIndex", "See Box2D documentation", int , 0 );
 }
