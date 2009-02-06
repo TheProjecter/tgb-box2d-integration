@@ -25,9 +25,9 @@
 
 
 //=----------------------------------------------------------------------------
-// Box2dInitializeRevoluteJoint()
+// Box2dInitializeRevoluteJointDef()
 //=----------------------------------------------------------------------------
-function Box2dInitializeRevoluteJoint( %jointDef, %body1, %body2, %anchor )
+function Box2dInitializeRevoluteJointDef( %jointDef, %body1, %body2, %anchor )
 {
     if ( %jointDef.jointType $= "" )
     {
@@ -35,7 +35,7 @@ function Box2dInitializeRevoluteJoint( %jointDef, %body1, %body2, %anchor )
     }
     else if ( %jointDef.jointType !$= e_revoluteJoint )
     {
-        warn( "Box2dInitializeRevoluteJoint() - %jointDef must be of type" SPC
+        warn( "Box2dInitializeRevoluteJointDef() - %jointDef must be of type" SPC
               "e_revoluteJoint." );
         return;
     }    
@@ -49,9 +49,9 @@ function Box2dInitializeRevoluteJoint( %jointDef, %body1, %body2, %anchor )
 
 
 //=----------------------------------------------------------------------------
-// Box2dInitializePrismaticJoint()
+// Box2dInitializePrismaticJointDef()
 //=----------------------------------------------------------------------------
-function Box2dInitializePrismaticJoint( %jointDef, %body1, %body2, %anchor, 
+function Box2dInitializePrismaticJointDef( %jointDef, %body1, %body2, %anchor, 
     %axis )
 {
     if ( %jointDef.jointType $= "" )
@@ -60,7 +60,7 @@ function Box2dInitializePrismaticJoint( %jointDef, %body1, %body2, %anchor,
     }
     else if ( %jointDef.jointType !$= e_prismaticJoint )
     {
-        warn( "Box2dInitializePrismaticJoint() - %jointDef must be of type" SPC
+        warn( "Box2dInitializePrismaticJointDef() - %jointDef must be of type" SPC
               "e_prismaticJoint." );
         return;
     }    
@@ -71,4 +71,36 @@ function Box2dInitializePrismaticJoint( %jointDef, %body1, %body2, %anchor,
 	%jointDef.localAnchor2 = %body2.getLocalPoint( %anchor );
 	%jointDef.localAxis1 = %body1.getLocalVector( %axis );
 	%jointDef.referenceAngle = %body2.getAngle() - %body1.getAngle();
+}
+
+
+//=----------------------------------------------------------------------------
+// Box2dInitializePulleyJointDef()
+//=----------------------------------------------------------------------------
+function Box2dInitializePulleyJointDef( %def, %b1, %b2, %ga1, %ga2, %anchor1, 
+    %anchor2, %r )
+{
+    if ( %def.jointType $= "" )
+    {
+        %def.jointType = e_pulleyJoint;    
+    }
+    else if ( %def.jointType !$= e_pulleyJoint )
+    {
+        warn( "Box2dInitializePulleyJoint() - %jointDef must be of type" SPC
+              "e_pulleyJoint." );
+        return;
+    }    
+    
+	%def.body1 = %b1;
+	%def.body2 = %b2;
+	%def.groundAnchor1 = %ga1;
+	%def.groundAnchor2 = %ga2;
+	%def.localAnchor1 = %b1.getLocalPoint( %anchor1 );
+	%def.localAnchor2 = %b2.getLocalPoint( %anchor2 );
+	%def.length1 = t2dVectorDistance( %anchor1, %ga1 );
+	%def.length2 = t2dVectorDistance( %anchor2, %ga2 );
+	%def.ratio = %r;
+	%C = %def.length1 + %r * %def.length2;
+	%def.maxLength1 = %C - %ratio * Box2dGetMinPulleyLength();
+	%def.maxLength2 = ( %C - Box2dGetMinPulleyLength() ) / %r;
 }
