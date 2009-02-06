@@ -117,4 +117,14 @@ float32 Box2dPulleyJointRef::getRatio() const
 ConsoleMethod( Box2dPulleyJointRef, getRatio, F32, 2, 2, "" )
 {
     return object->getRatio();
+
+}
+
+
+//=----------------------------------------------------------------------------
+// Box2dGetMinPulleyLength() - ConsoleFunction
+//=----------------------------------------------------------------------------
+ConsoleFunction( Box2dGetMinPulleyLength, F32, 1, 1, "" )
+{
+    return b2_minPulleyLength;
 }

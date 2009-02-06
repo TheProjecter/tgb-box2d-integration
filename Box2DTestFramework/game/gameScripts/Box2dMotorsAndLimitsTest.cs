@@ -61,7 +61,7 @@ function Box2dMotorsAndLimitsTest::setupScene( %this, %sceneGraph )
 
     %rjd = new SimObject();
     
-    Box2dInitializeRevoluteJoint( %rjd, %prevBody, %bodyRef, 0 SPC %y );   
+    Box2dInitializeRevoluteJointDef( %rjd, %prevBody, %bodyRef, 0 SPC %y );   
     %rjd.motorSpeed = -1.0 * 3.1415;
     %rjd.maxMotorTorque = 10000;
     %rjd.enableMotor = true;
@@ -77,7 +77,7 @@ function Box2dMotorsAndLimitsTest::setupScene( %this, %sceneGraph )
     %bodyRef = %worldRef.createBody( %box2Sco );
     %bodyRef.createShape( %box2Sco );
 
-    Box2dInitializeRevoluteJoint( %rjd, %bodyRef, %prevBody, 6 SPC %y );
+    Box2dInitializeRevoluteJointDef( %rjd, %bodyRef, %prevBody, 6 SPC %y );
     %rjd.motorSpeed = 0.5 * 3.1415;
     %rjd.maxMotorTorque = 2000.0;
     %rjd.enableMotor = true;
@@ -96,7 +96,7 @@ function Box2dMotorsAndLimitsTest::setupScene( %this, %sceneGraph )
     %bodyRef.createShape( %box3Sco );    
  
     %pjd = new SimObject();
-    Box2dInitializePrismaticJoint( %pjd, %groundSco.bodyRef, %bodyRef, "-10 -10",
+    Box2dInitializePrismaticJointDef( %pjd, %groundSco.bodyRef, %bodyRef, "-10 -10",
         "1 0" );
     %pjd.motorSpeed = 10;
     %pjd.maxMotorForce = 1000;
