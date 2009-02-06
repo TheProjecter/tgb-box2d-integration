@@ -13,6 +13,7 @@ exec( "./Box2dTestFrameworkUtil.cs" );
 exec( "./Box2dSimpleTest.cs" );
 exec( "./Box2dBridgeTest.cs" );
 exec( "./Box2dMotorsAndLimitsTest.cs" );
+exec( "./Box2dPulleysTest.cs" );
 
 //---------------------------------------------------------------------------------------------
 // startGame
