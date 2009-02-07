@@ -107,6 +107,22 @@ bool Box2dWorldRef::onAdd()
         return false;
     }
 
+    StringTableEntry stSceneGraph = StringTable->insert( "SceneGraph" );
+
+    t2dSceneGraph *sceneGraph = dynamic_cast<t2dSceneGraph*>(
+        Sim::findObject( this->getDataField( stSceneGraph, NULL ) )
+        );
+
+    AssertFatal( sceneGraph, "Box2dWorldRef::onAdd() - Invalid SceneGraph." );
+
+    if ( !sceneGraph )
+    {
+        Con::errorf( "Box2dWorldRef::onAdd() - Invalid SceneGraph." );
+        return false;
+    }
+
+    this->mSceneGraph = sceneGraph;
+
     b2AABB worldBounds;
     worldBounds.lowerBound.Set( -500.0f, -500.0f );
     worldBounds.upperBound.Set(  500.0f,  500.0f );
@@ -261,6 +277,10 @@ Box2dBodyRef * Box2dWorldRef::createBody( t2dSceneObject * def )
     AssertFatal( !Sim::findObject( def->getDataField( stBodyRef, NULL ) ),
         "Box2dWorldRef::createBody() - def object already has a BoxBodyRef" );
 
+    AssertFatal( ( def->getSceneGraph() == NULL ) || 
+        ( def->getSceneGraph() == this->mSceneGraph ), 
+        "Box2dWorldRef::createBody() - def object contained in wrong scene" );
+
     Box2dBodyRef * bodyRef = new Box2dBodyRef();
 
     if ( ! bodyRef->registerObject() ) {
@@ -269,6 +289,11 @@ Box2dBodyRef * Box2dWorldRef::createBody( t2dSceneObject * def )
 
         delete bodyRef;
         return NULL;
+    }
+
+    if ( def->getSceneGraph() == NULL )
+    {
+        this->mSceneGraph->addToScene( def );
     }
 
     b2BodyDef bodyDef;

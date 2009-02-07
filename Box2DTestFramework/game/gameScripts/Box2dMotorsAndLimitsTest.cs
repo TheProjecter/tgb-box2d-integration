@@ -45,7 +45,6 @@ function Box2dMotorsAndLimitsTest::setupScene( %this, %sceneGraph )
     %groundSco.addBehavior( Box2dBodyBehavior.createInstance() );
     %groundSco.addBehavior( Box2dShapeBehavior.createInstance() );
     
-    %sceneGraph.addToScene( %groundSco );
     %worldRef.createBody( %groundSco );
     %groundSco.bodyRef.createShape( %groundSco );
     
@@ -54,7 +53,6 @@ function Box2dMotorsAndLimitsTest::setupScene( %this, %sceneGraph )
     
     %box1Sco = %this.createBox();
     %box1Sco.Position = 3 SPC %y;
-    %sceneGraph.addToScene( %box1Sco );
     
     %bodyRef = %worldRef.createBody( %box1Sco );
     %bodyRef.createShape( %box1Sco );
@@ -72,7 +70,6 @@ function Box2dMotorsAndLimitsTest::setupScene( %this, %sceneGraph )
 
     %box2Sco = %this.createBox();
     %box2Sco.Position = 9 SPC %y;
-    %sceneGraph.addToScene( %box2Sco );
     
     %bodyRef = %worldRef.createBody( %box2Sco );
     %bodyRef.createShape( %box2Sco );
@@ -90,8 +87,7 @@ function Box2dMotorsAndLimitsTest::setupScene( %this, %sceneGraph )
     %box3Sco = %this.createBox();
     %box3Sco.Position = "-10 -10";    
     %box3Sco.Rotation = 90;
-    %sceneGraph.addToScene( %box3Sco );    
-    
+     
     %bodyRef = %worldRef.createBody( %box3Sco );
     %bodyRef.createShape( %box3Sco );    
  

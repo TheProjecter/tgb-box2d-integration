@@ -42,8 +42,7 @@ function Box2dPulleysTest::setupScene( %this, %sceneGraph )
     
     %groundSco = Box2dCreateRectanglePoly( "100 20" );
     %groundSco.Position = "0 10";
-    %sceneGraph.addToScene( %groundSco );
-
+    
     %groundSco.addBehavior( Box2dShapeBehavior.createInstance() );
     %groundSco.addBehavior( Box2dBodyBehavior.createInstance() );    
     
@@ -63,12 +62,10 @@ function Box2dPulleysTest::setupScene( %this, %sceneGraph )
 	%def.addBehavior( Box2dBodyBehavior.createInstance() );
     
     %body1Sco = %def.cloneWithBehaviors( false );
-	%sceneGraph.addToScene( %body1Sco );
-    %worldRef.createBody( %body1Sco ).createShape( %body1Sco );	
+	%worldRef.createBody( %body1Sco ).createShape( %body1Sco );	
 	
 	%body2Sco = %def.cloneWithBehaviors( false );
     %body2Sco.Position = 10 SPC -%y;    
-    %sceneGraph.addToScene( %body2Sco );
     %worldRef.createBody( %body2Sco ).createShape( %body2Sco );	
     
     %pulleyDef = new SimObject();
@@ -89,6 +86,9 @@ function Box2dPulleysTest::setupScene( %this, %sceneGraph )
     %pulleyDef.collideConnected = true;    
     
 	%worldRef.createJoint( %pulleyDef );
+	
+	%pulleyDef.delete();
+	%def.delete();
 }
 
 $Box2dPulleysTest = new t2dSceneObject()
