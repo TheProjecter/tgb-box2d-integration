@@ -171,6 +171,7 @@ private:
     BodyVector                      mBodyRefs;
     Box2dBodyRef                   *mGroundBody;
     b2Vec2                          mGravity;
+    t2dSceneGraph                  *mSceneGraph;
 };
 
 #endif
