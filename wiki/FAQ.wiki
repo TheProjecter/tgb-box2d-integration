@@ -1,6 +1,4 @@
-#summary FAQ
 #labels Featured
-
 <wiki:toc max_depth="2" />
 
 ==How do I enable Box2D simulation for a t2dSceneGraph?==
