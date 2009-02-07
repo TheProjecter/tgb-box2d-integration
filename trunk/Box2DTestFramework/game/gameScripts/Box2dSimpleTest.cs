@@ -46,8 +46,6 @@ function Box2dSimpleTest::setupScene( %this, %sceneGraph )
     %shapeBehavior.Density = 1;
     %object.addBehavior( %shapeBehavior );
     
-    %sceneGraph.addToScene( %object );
-    
     %bodyRef = %sceneGraph.worldRef.createBody( %object );
     %bodyRef.createShape( %object );
 }

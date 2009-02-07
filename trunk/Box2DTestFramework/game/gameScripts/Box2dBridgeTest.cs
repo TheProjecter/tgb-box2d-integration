@@ -43,8 +43,6 @@ function Box2dBridgeTest::setupScene( %this, %sceneGraph )
     %groundSceneObject.addBehavior( Box2dBodyBehavior.createInstance() );
     %groundSceneObject.addBehavior( Box2dShapeBehavior.createInstance() );
 
-    %sceneGraph.addToScene( %groundSceneObject );    
-    
     %sceneGraph.worldRef.createBody( %groundSceneObject );
     %groundSceneObject.bodyRef.createShape( %groundSceneObject );
     
@@ -59,9 +57,7 @@ function Box2dBridgeTest::setupScene( %this, %sceneGraph )
     {
         %plankSceneObject = %this.createPlank();
         %plankSceneObject.SetPosition( ( -14.5 + %i ) SPC -5 );
-        
-        %sceneGraph.addToScene( %plankSceneObject ); 
-        
+                
         %sceneGraph.worldRef.createBody( %plankSceneObject );        
         %plankSceneObject.bodyRef.createShape( %plankSceneObject );
         %plankSceneObject.bodyRef.setMassFromShapes();        

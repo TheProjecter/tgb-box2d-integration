@@ -43,6 +43,7 @@ function Box2dScene::onLevelLoaded( %this )
 {
     %this.worldRef = new Box2dWorldRef()
     {
+        sceneGraph = %this;
         gravity = %this.gravity;
     };
     
