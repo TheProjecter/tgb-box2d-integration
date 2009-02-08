@@ -45,8 +45,8 @@ function RegisterTest( %testObject )
 //=----------------------------------------------------------------------------
 function RunTest( %testObject )
 {
-   $Box2dTestFrameworkScene.endLevel();
-   $Box2dTestFrameworkScene.OnLevelLoaded();
+   $Box2dTestFrameworkScene.deinitWorldRef();
+   $Box2dTestFrameworkScene.initWorldRef();
    
    %testObject.setupScene( $Box2dTestFrameworkScene );
    
