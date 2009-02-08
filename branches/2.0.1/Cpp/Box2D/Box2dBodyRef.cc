@@ -79,7 +79,7 @@ Box2dShapeRef * Box2dBodyRef::createShape( t2dSceneObject * def )
 
     AssertFatal( shapeBehavior != NULL,
         "Box2dBodyRef::createShape() -\
-         def must be an instance of Box2dShapeBehavior" );
+         def must own an instance of Box2dShapeBehavior" );
     
     AssertFatal( 
         Box2dShapeRef::isSupported( 
