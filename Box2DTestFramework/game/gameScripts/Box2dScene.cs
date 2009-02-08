@@ -31,7 +31,8 @@ function Box2dScene::onUpdateSceneTick( %this )
 {
     if ( isObject( %this.worldRef ) )
     {
-        %this.worldRef.step( %this.worldRef.getTickTimeStep(), 10 );
+        %this.worldRef.step( %this.worldRef.getTickTimeStep(), 
+            %this._iterations );
     }
 }
 
@@ -41,11 +42,7 @@ function Box2dScene::onUpdateSceneTick( %this )
 //=----------------------------------------------------------------------------
 function Box2dScene::onLevelLoaded( %this )
 {
-    %this.worldRef = new Box2dWorldRef()
-    {
-        sceneGraph = %this;
-        gravity = %this.gravity;
-    };
+    %this.initWorldRef();
     
     %this._setupPreExistingObjects();
 }
@@ -107,12 +104,43 @@ function Box2dScene::_setupPreExistingObjects( %this )
 //=----------------------------------------------------------------------------
 function Box2dScene::onLevelEnded( %this )
 {
+    %this.deinitWorldRef();
+}
+
+
+//=----------------------------------------------------------------------------
+// Box2dScene::initWorldRef()
+//=----------------------------------------------------------------------------
+function Box2dScene::initWorldRef( %this )
+{
+    %this._iterations = 10;
+    
+    if ( %this.iterations !$= "" )
+    {
+        %this._iterations = %this.iterations;
+    }
+    
+    %this.worldRef = new Box2dWorldRef()
+    {
+        sceneGraph = %this;
+        gravity = %this.gravity;
+    };
+}
+
+
+//=----------------------------------------------------------------------------
+// Box2dScene::deinitWorldRef()
+//=----------------------------------------------------------------------------
+function Box2dScene::deinitWorldRef( %this )
+{
     if ( isObject( %this.worldRef ) )
     {
         %this.worldRef.delete();
     }
     
-    if ( isFunction(printBox2dDebugInfo) )
+    %this.worldRef = "";
+    
+    if ( isFunction( printBox2dDebugInfo ) )
     {
         printBox2dDebugInfo();
     }

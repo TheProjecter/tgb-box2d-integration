@@ -1634,7 +1634,7 @@ Box2dJointRef* Box2dWorldRef::createGearJoint( SimObject *def )
             dynamic_cast<Box2dJointRef*>( Sim::findObject( value ) );
         
         AssertFatal( dynamic_cast<Box2dRevoluteJointRef*>( jointRef1 ) ||
-            dynamic_cast<Box2dRevoluteJointRef*>( jointRef1 ),
+            dynamic_cast<Box2dPrismaticJointRef*>( jointRef1 ),
             "Box2dWorldRef::createGearJoint() - Joint 1 is neither a revolute \
              joint nor a prismatic joint." );
 
@@ -1649,7 +1649,7 @@ Box2dJointRef* Box2dWorldRef::createGearJoint( SimObject *def )
             dynamic_cast<Box2dJointRef*>( Sim::findObject( value ) );
         
         AssertFatal( dynamic_cast<Box2dRevoluteJointRef*>( jointRef2 ) ||
-            dynamic_cast<Box2dRevoluteJointRef*>( jointRef2 ),
+            dynamic_cast<Box2dPrismaticJointRef*>( jointRef2 ),
             "Box2dWorldRef::createGearJoint() - Joint 2 is neither a revolute \
              joint nor a prismatic joint." );
 

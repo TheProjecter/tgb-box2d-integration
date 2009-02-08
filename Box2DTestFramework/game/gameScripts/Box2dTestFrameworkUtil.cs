@@ -36,3 +36,33 @@ function Box2dCreateRectanglePoly( %size )
         LineColor = "1 1 1 1";
     };
 }
+
+
+//=----------------------------------------------------------------------------
+// Box2dCreateCirclePoly()
+//=----------------------------------------------------------------------------
+function Box2dCreateCirclePoly( %size, %edgeCount )
+{
+    %sceneObject = new t2dShapeVector()
+    {
+        Size = %size;
+        LineColor = "1 1 1 1";
+        CollisionCircleSuperscribed = false;
+        CollisionDetectionMode = CIRCLE;
+    };
+    
+    %vertexList = "";
+    %twoPi = 3.1415926 * 2; 
+    for ( %i = 0; %i < %edgeCount; %i++ )
+    {
+        %angle = ( %i / %edgeCount ) * %twoPi;
+        
+        %y = mSin( %angle );
+        %x = mCos( %angle );
+        
+        %vertexList = %vertexList SPC %x SPC %y;
+    }
+    
+    %sceneObject.PolyList = %vertexList SPC "0 0";
+    return %sceneObject;
+}
