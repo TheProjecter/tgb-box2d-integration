@@ -111,3 +111,20 @@ Yes, there is: Just write yourself some helper functions that do the heavy lifti
 
 ==Can I use the scene editor to create a Box2D scene?==
 Yes, you can. Just add a Box2dBodyBehavior or Box2dShapeBehavior to the scene objects you want to represent Box2D entities. The only additional thing to know here is that shapeSceneObjects have to be mounted to their bodySceneObjects (unless of course the shapeSceneObject is the bodySceneObject).
+
+==How can I create prismatic joint, revolute joint, or some other joint?==
+As in normal Box2D you have to use a definition object to create a joint. In contrast to bodies and shapes, joints are not represented by a t2dSceneObject. Therefore the definition object of a joint is not a Behavior but a simple SimObject that uses dynamic fields to store the definition data. Here is some sample code:
+{{{
+%jointDef = new SimObject()
+{
+    jointType = e_revoluteJoint;
+    body1 = %bodyRef1;
+    body2 = %bodyRef2;
+    localAnchor1 = %bodyRef1.getLocalPoint( %bodyRef2.getPosition() );
+    localAnchor2 = %bodyRef2.getLocalPoint( %bodyRef2.getPosition() );
+    referenceAngle = %bodyRef2.getAngle() - %bodyRef1.getAngle();     
+};
+    
+%joint1 = %worldRef.createJoint( %jointDef );
+}}}
+The field names must be the same as the field names of the corresponding b2JointDef. Also note that the ´body1´ and ´body2´ fields must be set to the Box2dBodyRef object of a body, not the t2dSceneObject that represents the body or the Box2dBodyBehavior that acted as the body definition. 
