@@ -9,6 +9,8 @@
 //---------------------------------------------------------------------------------------------
 function initializeProject()
 {
+   exec( "./gameScripts/guiProfiles.cs" );
+   
    // Load up the in game gui.
    exec("~/gui/mainScreen.gui");
 
